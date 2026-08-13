@@ -1,0 +1,9 @@
+{
+    "source_file": "2026-08-13T20-20_export.csv",
+    "strategy_id": 7,
+    "sharpe_ratio": 19.4768,
+    "max_drawdown_pct": 3.403,
+    "lookback_window": 39.55,
+    "breakout_threshold": 0.00458,
+    "channel_weight": 0.8647
+}
