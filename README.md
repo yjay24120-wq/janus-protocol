@@ -1,1 +1,4 @@
-# janus-protocol
+streamlit
+numpy
+pandas
+yfinance

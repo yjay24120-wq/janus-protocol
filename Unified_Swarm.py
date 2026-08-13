@@ -364,7 +364,7 @@ class GeneticPersistenceLayer:
             ''')
             conn.commit()
 
-    def persist_elite(self, elite, oos_degradation=1.0):
+    def persist_elite(self, elite, degradation_ratio=1.0):
         if elite is None:
             return
         sharpe = -elite.val_loss if elite.val_loss < 900 else 0.0
@@ -372,7 +372,7 @@ class GeneticPersistenceLayer:
             conn.execute('''
                 INSERT INTO evolved_channel_elites (sharpe_ratio, max_drawdown, tracking_jitter, oos_degradation, sortino, calmar, var_95, pareto_rank, dna_vector)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (sharpe, elite.max_dd, elite.tracking_jitter, oos_degradation, elite.sortino, elite.calmar, elite.var_95, elite.pareto_rank, json.dumps(elite.dna)))
+            ''', (sharpe, elite.max_dd, elite.tracking_jitter, degradation_ratio, elite.sortino, elite.calmar, elite.var_95, elite.pareto_rank, json.dumps(elite.dna)))
             conn.commit()
 
     @staticmethod
@@ -474,7 +474,7 @@ if st.sidebar.button("🚀 Launch Swarm Optimization Pass"):
         wf_engine = WalkForwardValidationEngine(n_splits=3, train_ratio=0.7)
         _, degradation_ratio = wf_engine.validate_strategy_robustness(best_global_elite, benchmark_matrix)
         
-        persistence_layer.persist_elite(best_global_elite, oos_degradation=degradation_ratio)
+        persistence_layer.persist_elite(best_global_elite, degradation_ratio=degradation_ratio)
         status.update(label="Optimization & Validation Complete!", state="complete", expanded=False)
     st.sidebar.success("Database metrics successfully updated.")
 
