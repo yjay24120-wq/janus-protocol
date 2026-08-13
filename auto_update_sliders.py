@@ -5,8 +5,9 @@ import pandas as pd
 import subprocess
 
 def get_latest_telemetry_file():
-    """Scans the working directory for the most recent telemetry export CSV."""
-    csv_files = glob.glob("*_export.csv")
+    """Scans the working directory for the most recent telemetry export CSV based on modification time."""
+    csv_files = glob.glob("*_export.csv") + glob.glob("*export*.csv")
+    csv_files = list(set(csv_files))  # Remove duplicates
     if not csv_files:
         raise FileNotFoundError("No telemetry export CSV files found in the directory.")
     latest_file = max(csv_files, key=os.path.getmtime)
